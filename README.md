@@ -1,0 +1,2 @@
+# trainTicketBookingSystem
+An organization wants to implement a train ticketing system using which multiple users are able to book tickets simultaneously. The system should implement a login functionality for admins to add train details such as train number, train source, and destination, departure time, etc., and separate login for the users in order to book tickets using train source and destination. You should use socket programming principles in order to implement the above system.
