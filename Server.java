@@ -43,7 +43,7 @@ public class Server {
 
 		try {
 			//Change username and password as per your database
-			Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/railway_database?autoReconnect=true&useSSL=false","railway_manager","");
+			Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/railway?autoReconnect=true&useSSL=false","root","0000");
 
 			return c;
 		}
