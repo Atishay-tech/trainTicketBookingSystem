@@ -47,6 +47,7 @@ public class user
         if(var==0)
         {
             System.out.println("Train number doesn't exist");
+            return;
         }
 
         System.out.print("Enter boarding point : ");
@@ -244,9 +245,9 @@ public class user
                 st.setDate(9,r1.getDate(10));
                 st.setInt(10,tnum);				
                 st.executeUpdate();
+
                 System.out.println("Congrats!!!! Your ticket is booked. Have a nice day!!");
             }
-
             tckt();
             tckt1();
         }

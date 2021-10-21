@@ -74,6 +74,78 @@ class admin
 			train_db(num,name,seats,bp,dp,f[0],f[1],f[2],f[3],date,dtime,atime);
 		}
 	}
+
+	void update_train_info()
+	{
+		int num,seats;
+		String name,bp,dp;
+		int[] f=new int[4];
+		
+		String ch="y";
+		while(ch=="y")
+		{
+			System.out.print("Enter 4-digit train number : ");
+			num=i.nextInt();
+			if(num<1000 || num>9999)
+			{
+				System.out.println("Enter correct train number of 4 digits only!!!");
+			}
+			else
+			{	
+				System.out.print("Enter Train name for Train number "+num+" : ");
+				name=i.next();
+				java.sql.Date date=	null;
+				System.out.print("Enter date of train's journey in (yyyy-mm-dd) format : ");
+				String dt=i.next();
+				try
+				{
+					java.util.Date dt1=new SimpleDateFormat("yyyy-MM-dd").parse(dt);
+					date=new java.sql.Date(dt1.getTime());
+				}
+				catch(Exception e)
+				{
+					System.out.println(e);
+				}
+			
+				
+				System.out.print("Enter Boarding Point : "); 
+				bp=i.next();
+				System.out.print("Enter Destination Point : ");
+				dp=i.next();
+				
+				System.out.print("Enter Departure time of train's journey in (hh:mm:ss) format : "); 
+				String dtime=i.next();
+				
+				System.out.print("Enter arrival time of train's journey in (hh:mm:ss) format : "); 
+				String atime=i.next();
+				
+				
+				System.out.print("Enter the total number of seats in the train : ");
+				seats=i.nextInt();
+			
+			
+				System.out.println("Enter price for each ticket type : ");
+				System.out.print("First AC ticket fare: ");
+				f[0]=i.nextInt();
+				System.out.print("Second AC ticket fare: ");
+				f[1]=i.nextInt();
+				System.out.print("Third AC ticket fare: ");
+				f[2]=i.nextInt();
+				System.out.print("Sleeper Class ticket fare: ");
+				f[3]=i.nextInt();
+				update_train_db(num,name,seats,bp,dp,f[0],f[1],f[2],f[3],date,dtime,atime);
+			}
+			System.out.print("Do you want to continue (y/n) : ");
+			ch=i.next();
+		}
+
+		try {
+			r.admin_mode();
+		}
+		catch (Exception e) {
+			System.out.println(e);
+		}
+	}
 	
 	void user_signup() throws Exception
 	{
@@ -181,6 +253,35 @@ class admin
 			System.out.println(e);
 		}
 	}
+
+	void update_train_db(int tnum,String tname,int seats,String bp,String dp,int i,int j,int k,int l,java.sql.Date date,String dtime,String atime)
+	{	
+		try
+		{
+			Connection c=Server.connect_db();
+			PreparedStatement del=c.prepareStatement("delete from train where tnum="+tnum);
+			del.executeUpdate();
+			PreparedStatement st=c.prepareStatement("insert into train (tnum,tname,seats,bp,dp,fAC,sAC,tAC,sc,doj,dtime,atime) values(?,?,?,?,?,?,?,?,?,?,?,?)");
+
+			st.setInt(1,tnum);
+			st.setString(2,tname);
+			st.setInt(3,seats);
+			st.setString(4,bp);
+			st.setString(5,dp);	
+			st.setInt(6,i);
+			st.setInt(7,j);
+			st.setInt(8,k);
+			st.setInt(9,l);
+			st.setDate(10,date);
+			st.setString(11,dtime);
+			st.setString(12,atime);			
+			st.executeUpdate();
+		}
+		catch(Exception e)
+		{
+			System.out.println(e);
+		}
+	}
 	
 	
 	void user_db(String uname,String pass,int age,String g)
@@ -204,6 +305,8 @@ class admin
 			System.out.println(e);
 		}
 	}
+
+
 	void cr_train_info() throws Exception
 	{	
 		String ch="y";
@@ -402,7 +505,7 @@ class admin
 			System.out.println("```````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````````");
 
 
-			String results = socket.get_response("select * from chart where pnr>=21215 and tnum='"+tn+"' ");
+			String results = socket.get_response("select * from chart where tnum='"+tn+"' ");
 			String[] tickets = results.split("\n");
 
 			for (int i=0; i<tickets.length; i++)
